@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merchant Checkout Test Page</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .header {
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+    .header p {
+      margin: 0;
+      color: #6b7280;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 24px;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    .summary-line.total {
+      font-size: 19px;
+      font-weight: 800;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 14px;
+      margin-top: 18px;
+    }
+    .badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      background: #111827;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px 18px;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+    .btn:hover { opacity: 0.95; }
+    .muted {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .product {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .product-thumb {
+      width: 68px;
+      height: 68px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #dbeafe, #ede9fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #374151;
+    }
+    .product h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+    .product p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 13px;
+    }
+    .debug {
+      margin-top: 26px;
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: 14px;
+      padding: 18px;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    code.inline {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    @media (max-width: 900px) {
+      .grid, .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Merchant Checkout Test Page</h1>
+      <p>This page acts like a merchant checkout page so you can paste your merchant-side integration script just before <code class="inline">&lt;/body&gt;</code> and test the flow.</p>
+      <span class="badge">Test Merchant UI Only</span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Billing Details</h2>
+
+        <div class="row">
+          <div class="field">
+            <label for="customerName">Customer Name</label>
+            <input id="customerName" type="text" value="Dorji Lhendup" />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" value="dorji@example.com" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="mobilePhone">Mobile Phone</label>
+            <input id="mobilePhone" type="text" value="17123456" />
+          </div>
+          <div class="field">
+            <label for="orderRef">Order Reference</label>
+            <input id="orderRef" type="text" value="ORD-TEST-1001" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="shippingAddress">Shipping Address</label>
+          <textarea id="shippingAddress">Changlam, Thimphu, Bhutan</textarea>
+        </div>
+
+        <div class="field">
+          <label for="notes">Order Notes</label>
+          <textarea id="notes">Please deliver during office hours.</textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Order Summary</h2>
+
+        <div class="product">
+          <div class="product-thumb">MC</div>
+          <div>
+            <h3>Bhutan Handcrafted Tote</h3>
+            <p>Natural fiber artisan product</p>
+          </div>
+        </div>
+
+        <div class="summary-line">
+          <span>Item price</span>
+          <span>$125.00</span>
+        </div>
+        <div class="summary-line">
+          <span>Shipping</span>
+          <span>$0.00</span>
+        </div>
+        <div class="summary-line total">
+          <span>Total</span>
+          <span id="amount">125.00</span>
+        </div>
+
+        <p class="muted">Currency is expected to be forced to USD (840) by your backend. This page only provides merchant-side fields for testing.</p>
+
+        <button id="checkoutButton" class="btn" type="button">Proceed to Checkout</button>
+
+        <p class="muted" style="margin-top:14px;">This button is what your merchant-side integration script should attach to. After you paste your script below, clicking it should POST to your Vercel payment logic endpoint.</p>
+      </div>
+    </div>
+
+    <div class="debug">
+      <strong>Available test selectors on this page</strong><br><br>
+      amountSelector = <code>#amount</code><br>
+      orderRefSelector = <code>#orderRef</code><br>
+      customerNameSelector = <code>#customerName</code><br>
+      emailSelector = <code>#email</code><br>
+      mobilePhoneSelector = <code>#mobilePhone</code><br>
+      checkoutButtonSelector = <code>#checkoutButton</code><br><br>
+
+      <strong>How to test</strong><br>
+      1. Paste your merchant-side integration script just before the closing body tag.<br>
+      2. Replace the API URL with your Vercel endpoint.<br>
+      3. Keep the selectors matching this page.<br>
+      4. Click the checkout button and verify it redirects into your backend flow.<br>
+    </div>
+  </div>
+
+  <!-- Paste your merchant-side integration script here, just before </body> -->
+</body>
+</html>

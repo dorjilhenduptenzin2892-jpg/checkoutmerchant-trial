@@ -1,0 +1,16 @@
+{
+  "name": "merchant-checkout-trial",
+  "version": "1.0.0",
+  "description": "Merchant Checkout Test Page",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "dev": "http-server -p 8080 -o"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
