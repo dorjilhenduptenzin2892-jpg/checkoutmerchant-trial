@@ -278,7 +278,9 @@
 
     function getValue(selector) {
       const el = document.querySelector(selector);
-      return el ? String(el.value || '').trim() : '';
+      if (!el) return '';
+      const raw = ('value' in el) ? el.value : el.textContent;
+      return String(raw || '').trim();
     }
 
     function buildHidden(name, value) {
