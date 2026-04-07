@@ -256,94 +256,87 @@
     </div>
   </div>
 <script>
-  (function () {
-    // ===== Merchant configuration =====
-    const apiUrl = 'https://checkoutmerchant-trial-m6c5.vercel.app/api/initiate';
-    const merchantId = '863990030700270';
+(function () {
+  const apiUrl = 'https://checkoutmerchant-trial-m6c5.vercel.app/api/initiate';
+  const merchantId = '863990030700270';
 
-    // ===== Page selectors =====
-    const amountSelector = '#amount';
-    const orderRefSelector = '#orderRef';
-    const customerNameSelector = '#customerName';
-    const emailSelector = '#email';
-    const mobilePhoneSelector = '#mobilePhone';
-    const checkoutButtonSelector = '#checkoutButton';
+  const amountSelector = '#amount';
+  const orderRefSelector = '#orderRef';
+  const customerNameSelector = '#customerName';
+  const emailSelector = '#email';
+  const checkoutButtonSelector = '#checkoutButton';
 
-    function getValue(selector) {
-      const el = document.querySelector(selector);
-      if (!el) return '';
-      const raw = ('value' in el) ? el.value : el.textContent;
-      return String(raw || '').trim();
+  let submitting = false;
+
+  function getValue(selector) {
+    const el = document.querySelector(selector);
+    if (!el) return '';
+    const raw = ('value' in el) ? el.value : el.textContent;
+    return String(raw || '').trim();
+  }
+
+  function normalizeAmount(value) {
+    return String(value || '').replace(/[^0-9.]/g, '').trim();
+  }
+
+  function buildHidden(name, value) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value || '';
+    return input;
+  }
+
+  function startPayment(e) {
+    if (e) e.preventDefault();
+    if (submitting) return;
+
+    const amount = normalizeAmount(getValue(amountSelector));
+    const orderRef = getValue(orderRefSelector);
+    const customerName = getValue(customerNameSelector);
+    const email = getValue(emailSelector);
+    const customerRef = orderRef;
+
+    if (!amount || !orderRef) {
+      alert('Amount and order reference are required.');
+      return;
     }
 
-    function buildHidden(name, value) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = name;
-      input.value = value || '';
-      return input;
+    submitting = true;
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = apiUrl;
+    form.target = '_top';
+    form.style.display = 'none';
+
+    form.appendChild(buildHidden('merchantId', merchantId));
+    form.appendChild(buildHidden('amount', amount));
+    form.appendChild(buildHidden('orderRef', orderRef));
+    form.appendChild(buildHidden('customerRef', customerRef));
+
+    if (customerName) form.appendChild(buildHidden('customerName', customerName));
+    if (email) form.appendChild(buildHidden('email', email));
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  function bindCheckoutButton() {
+    const btn = document.querySelector(checkoutButtonSelector);
+    if (!btn) {
+      console.error('Checkout button not found.');
+      return;
     }
+    btn.addEventListener('click', startPayment);
+  }
 
-    function startPayment(event) {
-      if (event) event.preventDefault();
-
-      const amount = getValue(amountSelector);
-      const orderRef = getValue(orderRefSelector);
-      const customerName = getValue(customerNameSelector);
-      const email = getValue(emailSelector);
-      const mobilePhone = getValue(mobilePhoneSelector);
-      const customerRef = customerName || orderRef;
-
-      if (!amount || !orderRef) {
-        alert('Amount and order reference are required.');
-        return;
-      }
-
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = apiUrl;
-      form.target = '_top';
-      form.style.display = 'none';
-
-      form.appendChild(buildHidden('merchantId', merchantId));
-      form.appendChild(buildHidden('amount', amount));
-      form.appendChild(buildHidden('orderRef', orderRef));
-      form.appendChild(buildHidden('customerRef', customerRef));
-
-      if (customerName) form.appendChild(buildHidden('customerName', customerName));
-      if (email) form.appendChild(buildHidden('email', email));
-      if (mobilePhone) form.appendChild(buildHidden('mobilePhone', mobilePhone));
-
-      // Force top-level document submission
-      try {
-        if (window.top && window.top !== window.self) {
-          window.top.document.body.appendChild(form);
-        } else {
-          document.body.appendChild(form);
-        }
-      } catch (e) {
-        document.body.appendChild(form);
-      }
-
-      form.submit();
-    }
-
-    function bindCheckoutButton() {
-      const checkoutButton = document.querySelector(checkoutButtonSelector);
-      if (!checkoutButton) {
-        console.error('Checkout button not found. Update checkoutButtonSelector.');
-        return;
-      }
-
-      checkoutButton.addEventListener('click', startPayment);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bindCheckoutButton);
-    } else {
-      bindCheckoutButton();
-    }
-  })();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindCheckoutButton);
+  } else {
+    bindCheckoutButton();
+  }
+})();
 </script>
   <!-- Paste your merchant-side integration script here, just before </body> -->
 </body>
